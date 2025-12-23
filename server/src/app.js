@@ -9,13 +9,16 @@ const adminRoutes = require("../routes/admin.route");
 
 const app = express();
 
+// Instantiate rate limiter once so counters persist across requests.
+const rateLimiter = rateLimit();
+
 // Basic request parsing.
 app.use(express.json());
 
 // Apply rate limiting to all routes except /public (truly unrestricted).
 app.use((req, res, next) => {
   if (req.path.startsWith("/public")) return next();
-  return rateLimit()(req, res, next);
+  return rateLimiter(req, res, next);
 });
 
 // Route registration
