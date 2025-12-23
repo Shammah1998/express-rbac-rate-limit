@@ -45,6 +45,7 @@ curl -H "x-user-id: admin1" -H "x-user-role: ADMIN" http://localhost:3000/admin/
 ```
 
 ### Behavior Notes
+- Rate limiting is implemented as a single in-memory middleware instance shared by all requests in the process (per-user counters are stored in memory).
 - Missing `x-user-id` on rate-limited routes returns `400`; exceeding the window returns `429`.
 - Missing or insufficient `x-user-role` returns `403`.
 - In-memory counters reset when the server restarts.
